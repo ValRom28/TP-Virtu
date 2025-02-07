@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  # Traefik (point d'entrée)
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--api.dashboard=true"
+      - "--providers.docker=true"
+      - "--providers.docker.network=publicswarm"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.swarm=true"
+      - "--providers.swarm.network=publicswarm"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - publicswarm
+    labels:
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$apr1$mBcrIZOg$MpIv52N43HmtiVOidbWle."
+
+networks:
+  publicswarm:
+    external: true

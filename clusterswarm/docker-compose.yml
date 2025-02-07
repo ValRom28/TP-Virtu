@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: p4179-167:5000/mysql
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: motdepasse
+      MYSQL_DATABASE: ma_base_de_donnees
+    networks:
+      - publicswarm
+    volumes:
+      - clusterswarm_data:/var/lib/mysql
+    deploy:
+      replicas: 1
+
+  web:
+    build: ./utilisateurs  # Dockerfile dans ./utilisateurs
+    image: mon-serveur-web:latest
+    labels:
+      - "traefik.swarm.network=publicswarm"
+      - "traefik.enable=true"
+      - "traefik.http.routers.clusterswarm.rule=Host(`clusterswarm.localhost`)"
+      - "traefik.http.services.clusterswarm.loadbalancer.server.port=80"
+    networks:
+      - publicswarm
+    depends_on:
+      - db
+      - redis
+    deploy:
+      replicas: 5  # Augmenté à 5 instances
+
+  redis:
+    image: p4179-167:5000/redis
+    networks:
+      - publicswarm
+    volumes:
+      - redis_data:/data
+    deploy:
+      replicas: 2  # Deux instances Redis sur deux volumes GlusterFS
+
+volumes:
+  clusterswarm_data:
+    driver: local
+  redis_data:
+    driver: glusterfs
+    driver_opts:
+      volume: redis_volume
+      key: redis_gluster_config
+
+networks:
+  publicswarm:
+    external: true
