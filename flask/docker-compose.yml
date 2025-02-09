@@ -21,11 +21,12 @@ services:
       - flask
     deploy:
       replicas: 1
-    labels:
-      - "traefik.swarm.network=publicswarm"
-      - "traefik.enable=true"
-      - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
-      - "traefik.http.services.flask.loadbalancer.server.port=80"
+      labels:
+        - "traefik.swarm.network=publicswarm"
+        - "traefik.enable=true"
+        - "traefik.http.routers.flask.rule=Host(`flask.localhost`)"
+        - "traefik.http.services.flask.loadbalancer.server.port=80"
+        - "traefik.http.routers.flask.middlewares=auth@file"
 
 networks:
   publicswarm:

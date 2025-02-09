@@ -4,15 +4,16 @@ services:
   # Service Web (PHP + Apache) pour Fortune Images
   fortune:
     image: fortune:latest
-    labels:
-      - "traefik.swarm.network=publicswarm"
-      - "traefik.enable=true"
-      - "traefik.http.routers.fortune.rule=Host(`fortune.localhost`)"
-      - "traefik.http.services.fortune.loadbalancer.server.port=80"
     networks:
       - publicswarm
     deploy:
       replicas: 1
+      labels:
+        - "traefik.swarm.network=publicswarm"
+        - "traefik.enable=true"
+        - "traefik.http.routers.fortune.rule=Host(`fortune.localhost`)"
+        - "traefik.http.services.fortune.loadbalancer.server.port=80"
+        - "traefik.http.routers.fortune.middlewares=auth@file"
 
 networks:
   publicswarm:

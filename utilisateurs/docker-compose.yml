@@ -17,11 +17,6 @@ services:
   # Service Web (PHP + Apache)
   web:
     image: utilisateurs:latest
-    labels:
-        - "traefik.swarm.network=publicswarm"
-        - "traefik.enable=true"
-        - "traefik.http.routers.utilisateurs.rule=Host(`utilisateurs.localhost`)"
-        - "traefik.http.services.utilisateurs.loadbalancer.server.port=80"
     networks:
       - publicswarm
       - utilisateurs
@@ -30,6 +25,12 @@ services:
       - redis
     deploy:
       replicas: 3  # Réparti sur 3 nœuds pour le load-balancing
+      labels:
+          - "traefik.swarm.network=publicswarm"
+          - "traefik.enable=true"
+          - "traefik.http.routers.utilisateurs.rule=Host(`utilisateurs.localhost`)"
+          - "traefik.http.services.utilisateurs.loadbalancer.server.port=80"
+          - "traefik.http.routers.utilisateurs.middlewares=auth@file"
 
   # Service Redis
   redis:

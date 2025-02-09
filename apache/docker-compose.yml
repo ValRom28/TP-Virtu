@@ -7,12 +7,12 @@ services:
       - publicswarm
     deploy:
       replicas: 1
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.apache.rule=PathPrefix(`/apache`)"
-      - "traefik.http.services.apache.loadbalancer.server.port=80"
-      - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/apache"
-      - "traefik.http.routers.apache.middlewares=apache-stripprefix"
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.apache.rule=PathPrefix(`/apache`)"
+        - "traefik.http.services.apache.loadbalancer.server.port=80"
+        - "traefik.http.middlewares.apache-stripprefix.stripprefix.prefixes=/apache"
+        - "traefik.http.routers.apache.middlewares=apache-stripprefix,auth@file"
 
 networks:
   publicswarm:

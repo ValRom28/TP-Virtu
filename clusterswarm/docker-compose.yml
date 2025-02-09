@@ -15,11 +15,6 @@ services:
 
   web:
     image: clusterswarm:latest
-    labels:
-      - "traefik.swarm.network=publicswarm"
-      - "traefik.enable=true"
-      - "traefik.http.routers.clusterswarm.rule=Host(`clusterswarm.localhost`)"
-      - "traefik.http.services.clusterswarm.loadbalancer.server.port=80"
     networks:
       - publicswarm
       - clusterswarm
@@ -28,6 +23,12 @@ services:
       - redis
     deploy:
       replicas: 5
+      labels:
+        - "traefik.swarm.network=publicswarm"
+        - "traefik.enable=true"
+        - "traefik.http.routers.clusterswarm.rule=Host(`clusterswarm.localhost`)"
+        - "traefik.http.services.clusterswarm.loadbalancer.server.port=80"
+        - "traefik.http.routers.clusterswarm.middlewares=auth@file"
 
   redis:
     image: redis:latest
