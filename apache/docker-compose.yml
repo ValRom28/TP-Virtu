@@ -2,11 +2,9 @@ version: '3.8'
 
 services:
   apache:
-    image: httpd:latest
+    image: apache:latest
     networks:
       - publicswarm
-    volumes:
-      - ./www:/usr/local/apache2/htdocs/  # Monte ton fichier HTML dans le conteneur
     deploy:
       replicas: 1
     labels:

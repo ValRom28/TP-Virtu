@@ -1,7 +1,7 @@
 FROM python:3.9
-WORKDIR /file
-ADD file.py /file
-ADD requirements.txt /file
+WORKDIR /app
+COPY file.py /app
+COPY requirements.txt /app
 RUN pip install -r requirements.txt
-EXPOSE 80
 ENTRYPOINT ["python","file.py"]
+EXPOSE 80

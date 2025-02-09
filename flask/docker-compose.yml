@@ -2,24 +2,23 @@ version: '3.8'
 
 services:
   redis:
-    image: redis/redis-stack:latest
+    image: redis:latest
     volumes:
       - dataredis:/data
-    environment:
-      REDIS_ARGS: "--save 10 1"
     networks:
-      - publicswarm
+      - flask
     deploy:
       replicas: 1
 
-  site:
-    image: mon_flask:latest
+  web:
+    image: flask:latest
     volumes:
       - .:/file
     environment:
       - FLASK_ENV=development
     networks:
       - publicswarm
+      - flask
     deploy:
       replicas: 1
     labels:
@@ -30,6 +29,8 @@ services:
 
 networks:
   publicswarm:
+    external: true
+  flask:
     external: true
 
 volumes:

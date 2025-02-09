@@ -3,13 +3,12 @@ version: '3.8'
 services:
   # Service MySQL
   db:
-    image: p4179-167:5000/mysql
-    container_name: mysql-db
+    image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: motdepasse
       MYSQL_DATABASE: ma_base_de_donnees
     networks:
-      - publicswarm
+      - utilisateurs
     volumes:
       - utilisateurs_data:/var/lib/mysql
     deploy:
@@ -17,16 +16,15 @@ services:
 
   # Service Web (PHP + Apache)
   web:
-    build: ./utilisateurs  # Utilise le Dockerfile pour construire l'image
-    image: mon-serveur-web:latest
+    image: utilisateurs:latest
     labels:
         - "traefik.swarm.network=publicswarm"
         - "traefik.enable=true"
         - "traefik.http.routers.utilisateurs.rule=Host(`utilisateurs.localhost`)"
         - "traefik.http.services.utilisateurs.loadbalancer.server.port=80"
-    container_name: mon-serveur-web
     networks:
       - publicswarm
+      - utilisateurs
     depends_on:
       - db
       - redis
@@ -35,10 +33,9 @@ services:
 
   # Service Redis
   redis:
-    image: p4179-167:5000/redis
-    container_name: redis
+    image: redis:latest
     networks:
-      - publicswarm
+      - utilisateurs
     ports:
       - "6379:6379"
     deploy:
@@ -50,4 +47,6 @@ volumes:
 
 networks:
   publicswarm:
+    external: true
+  utilisateurs:
     external: true
