@@ -1,6 +1,8 @@
 # TP de Virtualisation - Valentin ROMANET
 Ce rendu présente ma réalisation du TP de virtualisation, qui consistait en un déploiement d'un ensemble de services sur un cluster Swarm, accessibles via un seul point d'entrée : l'ingress Traefik.
 
+Lien vers le dépôt Git : [https://github.com/ValRom28/TP-Virtu](https://github.com/ValRom28/TP-Virtu)
+
 ## Sommaire
 - [Introduction](#introduction)
 - [Travail Réalisé](#travail-réalisé)
@@ -25,6 +27,7 @@ Ce rendu présente ma réalisation du TP de virtualisation, qui consistait en un
         - [Service Fortune](#service-fortune-1)
         - [Service Utilisateurs](#service-utilisateurs-1)
     - [Nettoyage](#nettoyage)
+- [Récapitulatif des services](#récapitulatif-des-services)
 
 ## Introduction
 J'ai débuté la réalisation de ce TP sur les machines de l'IUT, en créant un cluster Swarm ave les trois machines virtuelles mises à notre disposition. J'ai rencontré divers problèmes aux niveau des noeuds du cluster ainsi qu'au niveau de la consommation des ressources des machines, ce qui m'a poussé à continuer le TP sur mon ordinateur personnel.  
